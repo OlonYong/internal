@@ -7,12 +7,14 @@ snacks_order = {1 : "Potato chips" , 2 : "Mrs Higgins Cookies", 3 : "Juicies", 4
 drinks = {"Water" : 2.50, "Lipton Ice Tea" : 4.50, "Aloe Ice Tea" : 4.50, "Barista Bros Chocolate" : 4.50, "Hot Chocolate" : 2.50, "Powerade" : 4.50}
 drinks_order = {1 : "Water" , 2 : "Lipton Ice Tea", 3 : "Aloe Ice Tea", 4: "Barista Bros Chocolate", 5: "Hot Chocolate", 6 : "Powerade"}
 order = []
+total = 0
+
 name = input("Enter your name: ")
 while True:
     try:
         age = int(input("Enter your age: "))
         if 13 > age < 18:
-            print("You must be between 13 and 18")
+            print("You must be between 13 and 18 years old")
             quit()
         else:
             break
@@ -20,25 +22,45 @@ while True:
         print("Please enter an integer")
 
 def add_item(menu):
-    choice = int(input("Your Entry: "))
-    order.append(menu[choice])
-
-print("BDSC CAFE MENU\n1. Hot Lunches\n2. Healthy Choices\n3. Snacks and Frozen\n4. Drinks\n5. Exit")
-choice = int(input("Your Entry: "))
-if choice == 1:
-    print("Hot Lunches\n1. Hot Noodles - $3.80\n2. Spaghetti Bun - $1.50\n3. Garlic Bread - $2.00\n4. Hot Dogs - $4.00\n5. Steam Buns - $3.70\n6. Peters Pie - $4.80\n7. Exit")
-    menu = hot_order
-    add_item(menu)
-elif choice == 2:
-    print("Healthy Choices\n1. Salad - $7.50\n2. Sandwiches - $4.80\n3. Sandwiches (Gluten Free) - $5.80\n4. Chicken Sub - $4.80\n5. Pizza Breads - $3.80\n6. Wraps - $5.50\n7. Exit")
-    menu = healthy_order
-    add_item(menu)
-elif choice == 3:
-    print("Snacks and Frozen\n1. Potato Chips - $2.50\n2. Mrs Higgins Cookies - $3.80\n3. Juicies - $1.00\n4. Coconut Juicies - $2.50\n5. Moosies - $2.00\n6. Slushies - $2.50\n7. Exit")
-    menu = snacks_order
-    add_item(menu)
-elif choice == 4:
-    print("Drinks\n1. Water - $2.50\n2. Lipton Ice Tea - $4.50\n3. Aloe Ice Tea - $4.50\n4. Barista Bros Chocolate - $4.50\n5. Hot Chocolate - $2.50\n6. Powerade - $4.50\n7. Exit")
-    menu = drinks_order
-    add_item(menu)
-print(f"Your total order is {order}")
+    global total
+    while True:
+        try:
+            choice = int(input("Your Entry: "))
+            if 1 <= choice <= 6:
+                order.append(menu[choice])
+                total += prices[menu[choice]]
+                break
+            elif choice == 7:
+                break
+        except ValueError:
+            print("INVALID")
+            input()
+while True:
+    print("BDSC CAFE MENU\n1. Hot Lunches\n2. Healthy Choices\n3. Snacks and Frozen\n4. Drinks\n5. Exit")
+    try:
+        choice = int(input("Your Entry: "))
+        if choice == 1:
+            print("Hot Lunches\n1. Hot Noodles - $3.80\n2. Spaghetti Bun - $1.50\n3. Garlic Bread - $2.00\n4. Hot Dogs - $4.00\n5. Steam Buns - $3.70\n6. Peters Pie - $4.80\n7. Exit")
+            menu = hot_order
+            prices = hot
+            add_item(menu)
+        elif choice == 2:
+            print("Healthy Choices\n1. Salad - $7.50\n2. Sandwiches - $4.80\n3. Sandwiches (Gluten Free) - $5.80\n4. Chicken Sub - $4.80\n5. Pizza Breads - $3.80\n6. Wraps - $5.50\n7. Exit")
+            menu = healthy_order
+            prices = healthy
+            add_item(menu)
+        elif choice == 3:
+            print("Snacks and Frozen\n1. Potato Chips - $2.50\n2. Mrs Higgins Cookies - $3.80\n3. Juicies - $1.00\n4. Coconut Juicies - $2.50\n5. Moosies - $2.00\n6. Slushies - $2.50\n7. Exit")
+            menu = snacks_order
+            prices = snacks
+            add_item(menu)
+        elif choice == 4:
+            print("Drinks\n1. Water - $2.50\n2. Lipton Ice Tea - $4.50\n3. Aloe Ice Tea - $4.50\n4. Barista Bros Chocolate - $4.50\n5. Hot Chocolate - $2.50\n6. Powerade - $4.50\n7. Exit")
+            menu = drinks_order
+            prices = drinks
+            add_item(menu)
+        elif choice == 5:
+            break
+    except ValueError:
+        input("Invalid Integer (enter to continue) ")
+print(f"Your total order is {', '.join(order)} coming to a total of ${total:.2f}")
