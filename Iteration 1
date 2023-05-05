@@ -1,3 +1,4 @@
+#Defining values
 hot = {"Hot Noodles" : 3.80, "Spaghetti Bun": 1.50, "Garlic Bread" : 2.00, "Hot Dogs" : 4.00, "Steam Buns" : 3.70, "Peters Pie" : 4.80}
 hot_order = {1 : "Hot Noodles" , 2 : "Spaghetti Bun", 3 : "Garlic Bread", 4: "Hot Dogs", 5: "Steam Buns", 6 : "Peters Pie"}
 healthy = {"Salads" : 7.50, "Sandwiches" : 4.80, "Sandwiches (Gluten Free)" : 5.80, "Chicken Sub" : 4.80, "Pizza Bread" : 3.80, "Wraps" : 5.50}
@@ -9,6 +10,7 @@ drinks_order = {1 : "Water" , 2 : "Lipton Ice Tea", 3 : "Aloe Ice Tea", 4: "Bari
 order = []
 total = 0
 
+#User login
 name = input("Enter your name: ")
 while True:
     try:
@@ -21,6 +23,7 @@ while True:
     except ValueError:
         print("Please enter an integer")
 
+#Add item function
 def add_item(menu):
     global total
     while True:
@@ -35,8 +38,10 @@ def add_item(menu):
         except ValueError:
             print("INVALID")
             input()
+
+#Main program
 while True:
-    print("BDSC CAFE MENU\n1. Hot Lunches\n2. Healthy Choices\n3. Snacks and Frozen\n4. Drinks\n5. Exit")
+    print("BDSC CAFE MENU\n1. Hot Lunches\n2. Healthy Choices\n3. Snacks and Frozen\n4. Drinks\n5. Exit") #Main menu
     try:
         choice = int(input("Your Entry: "))
         if choice == 1:
