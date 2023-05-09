@@ -1,18 +1,20 @@
 order = []
+final_order = {}
 hotmenu = {1 : ["Hot Noodles", 3.80], 2 : ["Spaghetti Bun", 1.50], 4 : ["Garlic Bread" , 2.00], 4 : ["Hot Dogs", 4.00], 5 : ["Steam Buns", 3.70], 6 : ["Peters Pie", 4.80]}
 coldmenu = {1 : ["Salads", 7.50], 2 : ["Sandwiches", 4.80], 3 : ["Sandwiches (Gluten Free)", 5.80], 4 : ["Chicken Sub", 4.80], 5 : ["Pizza Bread", 3.80], 6 : ["Wraps", 5.50]}
 drinksmenu = {1 : ["Water", 2.50], 2 : ["Lipton Ice Tea", 4.50], 3 : ["Aloe Ice Tea", 4.50], 4 : ["Barista Bros Chocolate", 4.50], 5 : ["Hot Chocolate", 2.50], 6 : ["Powerade", 4.50]}
 snacksmenu = {1 : ["Potato chips", 2.50], 2 : ["Mrs Higgins Cookies", 3.80], 3 : ["Juicies", 1.00], 4 : ["Coconut Juicies", 2.50], 5 : ["Moosies", 2.00], 6 : ["Slushies", 2.50]}
+inputs = {1 : ["hotmenu", "1. Hot Noodles - $3.80\n2. Spaghetti Bun - $1.50\n3. Garlic Bread - $2.00\n4. Hot Dogs - $4.00]\n5. Steam Buns - $3.70\n6. Peters Pie - $4.80"],
+          2 : ["coldmenu", "1. Salads - $7.50\n2. Sandwiches - $4.80\n3. Sandwiches (Gluten Free) - $2.00\n4. Chicken Sub - $4.00\n5. Pizza Bread - $3.70\n6. Wraps - $4.80"],
+          3 : ["snacksmenu", "1. Potato chips - $3.80\n2. Mrs Higgins Cookies - $1.50\n3. Juicies - $2.00\n4. Coconut Juicies - $4.00]\n5. Moosies - $3.70\n6. Slushies - $4.80"],
+          4 : ["drinksmenu", "1. Water - $3.80\n2. Lipton Ice Tea - $1.50\n3. Aloe Ice Tea - $2.00\n4. Barista Bros Chocolate - $4.00]\n5. Hot Chocolate - $3.70\n6. Powerade - $4.80"]}
 menus = {1 : hotmenu, 2: coldmenu, 3: snacksmenu, 4:drinksmenu}
-inputs = {1 : ["hotmenu", "1. Hot Noodles - $3.80/n2. Spaghetti Bun - $1.50/n3. Garlic Bread - $2.00\n4. Hot Dogs - $4.00]\n5. Steam Buns - $3.70\n6. Peters Pie - $4.80"],
-          2 : ["coldmenu", "1. Salads - $7.50/n2. Sandwiches - $4.80/n3. Sandwiches (Gluten Free) - $2.00\n4. Chicken Sub - $4.00\n5. Pizza Bread - $3.70\n6. Wraps - $4.80"],
-          3 : ["snacksmenu", "1. Potato chips - $3.80/n2. Mrs Higgins Cookies - $1.50/n3. Juicies - $2.00\n4. Coconut Juicies - $4.00]\n5. Moosies - $3.70\n6. Slushies - $4.80"],
-          4 : ["drinksmenu", "1. Water - $3.80/n2. Lipton Ice Tea - $1.50/n3. Aloe Ice Tea - $2.00\n4. Barista Bros Chocolate - $4.00]\n5. Hot Chocolate - $3.70\n6. Powerade - $4.80"]}
 
+username = input("What is your name?: ")
 age = int(input("How old are you?: "))
-if age < 19 and age > 12:
+if 12 < age < 19:
     while True:
-        print("1. Hot food\n2. Cold food\n3. Snacks\n4. Drinks\n5. Finish order")
+        print("1. Hot food\n2. Cold food\n3. Snacks\n4. Drinks\n5. Finish order\n6. Discard order")
         userinputs = int(input("Your choice: "))
         if 0 < userinputs and userinputs <= 4:
             while True:
@@ -23,3 +25,21 @@ if age < 19 and age > 12:
                 order.append(menus[userinputs][user][0])
         elif userinputs == 5:
             break
+        elif userinputs == 6:
+            exit()       
+    totalcost = 0
+    for i in menus:
+        for a in menus[i]:
+            totalcost += order.count(menus[i][a][0])*menus[i][a][1]
+    for item in order:
+        if item in final_order:
+            final_order[item] += 1
+        else:
+            final_order[item] = 1
+    output = ""
+    for item, count in final_order.items():
+        output += f"{count}x {item}, "
+    output = output.strip(", ") + "."
+    print(f"Your order is: {output}\nThe total cost is ${totalcost:.2f}")
+else:
+    exit()
