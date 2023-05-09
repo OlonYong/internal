@@ -1,45 +1,90 @@
+#Define Values
 order = []
-final_order = {}
-hotmenu = {1 : ["Hot Noodles", 3.80], 2 : ["Spaghetti Bun", 1.50], 4 : ["Garlic Bread" , 2.00], 4 : ["Hot Dogs", 4.00], 5 : ["Steam Buns", 3.70], 6 : ["Peters Pie", 4.80]}
-coldmenu = {1 : ["Salads", 7.50], 2 : ["Sandwiches", 4.80], 3 : ["Sandwiches (Gluten Free)", 5.80], 4 : ["Chicken Sub", 4.80], 5 : ["Pizza Bread", 3.80], 6 : ["Wraps", 5.50]}
-drinksmenu = {1 : ["Water", 2.50], 2 : ["Lipton Ice Tea", 4.50], 3 : ["Aloe Ice Tea", 4.50], 4 : ["Barista Bros Chocolate", 4.50], 5 : ["Hot Chocolate", 2.50], 6 : ["Powerade", 4.50]}
-snacksmenu = {1 : ["Potato chips", 2.50], 2 : ["Mrs Higgins Cookies", 3.80], 3 : ["Juicies", 1.00], 4 : ["Coconut Juicies", 2.50], 5 : ["Moosies", 2.00], 6 : ["Slushies", 2.50]}
-inputs = {1 : ["hotmenu", "1. Hot Noodles - $3.80\n2. Spaghetti Bun - $1.50\n3. Garlic Bread - $2.00\n4. Hot Dogs - $4.00]\n5. Steam Buns - $3.70\n6. Peters Pie - $4.80"],
-          2 : ["coldmenu", "1. Salads - $7.50\n2. Sandwiches - $4.80\n3. Sandwiches (Gluten Free) - $2.00\n4. Chicken Sub - $4.00\n5. Pizza Bread - $3.70\n6. Wraps - $4.80"],
-          3 : ["snacksmenu", "1. Potato chips - $3.80\n2. Mrs Higgins Cookies - $1.50\n3. Juicies - $2.00\n4. Coconut Juicies - $4.00]\n5. Moosies - $3.70\n6. Slushies - $4.80"],
-          4 : ["drinksmenu", "1. Water - $3.80\n2. Lipton Ice Tea - $1.50\n3. Aloe Ice Tea - $2.00\n4. Barista Bros Chocolate - $4.00]\n5. Hot Chocolate - $3.70\n6. Powerade - $4.80"]}
-menus = {1 : hotmenu, 2: coldmenu, 3: snacksmenu, 4:drinksmenu}
+total = 0
+loggedin = True
+menu = {
+    1 : ["HOT LUNCHES", [
+        ["Hot Noodles", 3.80], 
+        ["Spaghetti Bun", 1.50], 
+        ["Garlic Bread" , 2.00], 
+        ["Hot Dogs", 4.00], 
+        ["Steam Buns", 3.70], 
+        ["Peters Pie", 4.80]
+    ]],
+    2 : ["HEALTHY CHOICES", [
+        ["Salads", 7.50], 
+        ["Sandwiches", 4.80], 
+        ["Sandwiches (Gluten Free)", 5.80], 
+        ["Chicken Sub", 4.80], 
+        ["Pizza Bread", 3.80], 
+        ["Wraps", 5.50]
+    ]],
+    3 : ["SNACKS AND FROZEN", [
+        ["Potato chips", 2.50], 
+        ["Mrs Higgins Cookies", 3.80], 
+        ["Juicies", 1.00], 
+        ["Coconut Juicies", 2.50], 
+        ["Moosies", 2.00], 
+        ["Slushies", 2.50]
+    ]],
+    4: ["DRINKS", [
+        ["Water", 2.50], 
+        ["Lipton Ice Tea", 4.50], 
+        ["Aloe Ice Tea", 4.50], 
+        ["Barista Bros Chocolate", 4.50], 
+        ["Hot Chocolate", 2.50], 
+        ["Powerade", 4.50]
+    ]]
+}
 
-username = input("What is your name?: ")
-age = int(input("How old are you?: "))
-if 12 < age < 19:
-    while True:
-        print("1. Hot food\n2. Cold food\n3. Snacks\n4. Drinks\n5. Finish order\n6. Discard order")
-        userinputs = int(input("Your choice: "))
-        if 0 < userinputs and userinputs <= 4:
-            while True:
-                print(f"~~~~~~~~~~~~~~~\n   {inputs[userinputs][0]}\n~~~~~~~~~~~~~~~\n{inputs[userinputs][1]}\n5. Exit")
-                user = int(input("Your Entry: "))
-                if user == 5:
-                    break  
-                order.append(menus[userinputs][user][0])
-        elif userinputs == 5:
+#User Login
+while loggedin:
+    try:
+        choice = int(input("Would you like to\n1. Login\n2. Register account\nYour Entry: "))
+        if choice == 1:
+            name = input("Enter your name: ")
+            password = input("Enter your password: ")
+            with open("Internal assessment/Iteration 2/saved.txt", "r") as file:
+                for line in file:
+                    if name == line.split(" : ")[0] and password == line.split(" : ")[1]:
+                        loggedin = False
+                        break
+                else:
+                    input("Incorrect username or password\n")
+        elif choice == 2:
+            name = input("Enter a username: ")
+            password = input("Enter a password: ")
+            age = int(input("Enter your age: "))
+            if not (13 <= age <= 18):
+                print("You must be between 13 and 18 years old")
+                quit()
+            else:
+                with open("Internal assessment/Iteration 2/saved.txt", "a") as f:
+                    f.write(f"{name} : {password} : {age}\n")                
+                input("Account Created!\n")
+                break
+    except ValueError:
+        print("Please enter an integer")
+
+#Main program
+while True:
+    try:
+        choice = int(input("\nBDSC Cafe click and collect\n1. Hot food\n2. Cold food\n3. Snacks\n4. Drinks\n5. Finish order\n6. Discard order\nYour Entry: "))
+        if 1 <= choice <= 4:
+            title = f"~~~~~~~~~~~~~~~\n{menu[choice][0]}\n~~~~~~~~~~~~~~~\n"
+            for i in range(6):
+                title += f"{i+1}. {menu[choice][1][i][0]} - ${menu[choice][1][i][1]:.2f}\n"
+            title += "7. Exit"
+            choice2 = int(input(f"{title}\nYour Entry: "))
+            count = int(input("How many: "))
+            order.append(f"{menu[choice][1][choice2-1][0]} x{count}")
+            total += menu[choice][1][choice2-1][1] * count
+        elif choice == 5:
             break
-        elif userinputs == 6:
-            exit()       
-    totalcost = 0
-    for i in menus:
-        for a in menus[i]:
-            totalcost += order.count(menus[i][a][0])*menus[i][a][1]
-    for item in order:
-        if item in final_order:
-            final_order[item] += 1
+        elif choice == 6:
+            quit()
         else:
-            final_order[item] = 1
-    output = ""
-    for item, count in final_order.items():
-        output += f"{count}x {item}, "
-    output = output.strip(", ") + "."
-    print(f"Your order is: {output}\nThe total cost is ${totalcost:.2f}")
-else:
-    exit()
+            input("INVALID")
+    except ValueError:
+        input("INVALID INTEGER (enter to continue) ")
+print(f"Your order is {', '.join(order)} to a total of ${total:.2f}")
