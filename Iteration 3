@@ -1,6 +1,32 @@
 from tkinter import *
 from tkinter import ttk
 window = Tk()
+# The menu dictionary is used to store the menu items and their prices and descriptions.
+menu = {
+    "Hot Noodles" : [3.80, "Instant noodles in a cup (chicken beef, or spicy)"], 
+    "Spaghetti Bun" : [1.50, "Spaghetti tossed in a flavorful sauce and served between soft buns"], 
+    "Garlic Bread" : [2.00, "Freshly baked bread infused with aromatic garlic and butter, toasted to perfection"], 
+    "Hot Dogs" : [4.00, "Juicy sausages served in a soft bun"], 
+    "Steam Buns" : [3.70, "Soft and fluffy steamed buns filled with various savory fillings"], 
+    "Peters Pie" : [4.80, "Savory pies with a flaky crust and a meat filling"],
+    "Salads" : [7.50, "Fresh and crisp salad greens topped with a variety of vegetables, proteins, and dressings"], 
+    "Sandwiches" : [4.80, "Made with fresh bread and filled with a selection of meats, cheeses, and vegetables"], 
+    "Sandwiches (Gluten Free)" : [5.80, "Gluten-free bread filled with a selection of meats, cheeses, and vegetables"], 
+    "Chicken Sub" : [4.80, "A hearty sandwich filled with tender grilled chicken and fresh vegetables"], 
+    "Pizza Bread" : [3.80, "Bread topped with cheese, tomato sauce, and various toppings for a pizza-like flavor"], 
+    "Wraps" : [5.50, "Soft tortilla wraps filled with a variety of ingredients"],
+    "Potato chips" : [2.50, " Crispy and flavorful potato chips"], 
+    "Mrs Higgins Cookies" : [3.80, "Delicious chocolate chip cookies"], 
+    "Juicies" : [1.00,"Refreshing fruit juice frozen into a convenient and delicious ice block, available in various flavors"], 
+    "Coconut Juicies" : [2.50, "Refreshing coconut-flavored ice blocks"], 
+    "Moosies" : [2.00, "Creamy and indulgent ice cream bars"],
+    "Slushies" : [2.50, "Icy and refreshing drinks available in a range of fruity flavors"],
+    "Water" : [2.50, "Pure NZ Spring Water 600ml"], 
+    "Lipton Ice Tea" : [4.50, "Chilled and refreshing iced tea"], 
+    "Aloe Ice Tea" : [4.50, "A unique blend of iced tea infused with the soothing and refreshing taste of aloe vera"],
+    "Barista Bros Chocolate" : [4.50, "Rich and creamy chocolate milk made with the finest ingredients, providing a decadent and satisfying drink"], 
+    "Hot Chocolate" : [2.50, "A comforting and velvety smooth beverage made with warm milk and premium cocoa powder"], 
+    "Powerade" : [4.50, "A refreshing sports drink designed to replenish electrolytes and provide hydration during physical activities"]}
 
 #The starting frame. This is the login page.
 def frames1():
@@ -34,12 +60,50 @@ def frames1():
     message = Label(frame1, text="")
     message.pack()
 
+def frames2():
+    global frame2
+    global combo
+    global number
+    frame2 = Frame(window)
+    frame2.pack()
+    window.title("Order food")
+    window.geometry("530x400")
+    frame1.pack_forget()
+
+    title = Label(frame2, text="BDSC Cafe click and collect",font=("Comic Sans MS Bold", 20), pady=10)
+    title.pack()
+
+    titles = Label(frame2, text="Order food", font=("Comic Sans MS", 15))
+    titles.pack(padx=10, pady=10)   
+    
+    inner_frame = Frame(frame2)
+    inner_frame.pack()
+
+    combo = ttk.Combobox(inner_frame, values=[f"{item} - ${price:.2f}" for item, [price, _] in menu.items()], width=30)
+    combo.pack(side=LEFT)
+    combo.bind("<<ComboboxSelected>>", lambda event: description(combo, info))
+    combo.insert(0, "Select an item")
+    number = Spinbox(inner_frame, from_=1, to=999, width=3)
+    number.pack(side=LEFT, padx=10)
+
+    info = Label(frame2, text="")
+    info.pack()
+
+    add = Button(frame2, text="Add to order")
+    add.pack(pady=10)
+
+    back = Button(frame2, text="Back")
+    back.pack()
+
+    message = Label(frame2, text="")
+    message.pack()
+
 #This function checks whether the user's login details are valid.
 def login(username_entry, password_entry, message):
     with open("Internal assessment/Iteration 3/saved.txt", "r") as file:
         for line in file:
             if username_entry.get() == line.split(" : ")[0] and password_entry.get() == line.split(" : ")[1]:
-                print()     #placeholder for next frame
+                frames2()
             else:         
                 message.config(text="Incorrect username or password")
 
@@ -70,10 +134,15 @@ def create_account(username_entry, password_entry, age_entry, message):
         if int(age) < 13 or int(age) > 18:
             message.config(text="You must be 13 to 18 to create an account")
         else:
-            with open("Internal assessment/Iteration 3/saved.txt", "a") as f:
+            with open("Internal assessment/Iteration 3/saved.txt", "a") as f:   #writes into external text file
                 f.write(f"{user} : {password} : {age}\n")                
-                print()     #placeholder for next frame
+                frames2()
 
-
+#This function displays the description of the item selected in the combobox.
+def description(combo,info):
+    item = combo.get()
+    item = item.split(" - ")[0]
+    if item !="":
+        info.config(text=menu[item][1])
 frames1()
 window.mainloop()
