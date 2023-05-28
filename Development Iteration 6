@@ -1,73 +1,246 @@
 from tkinter import *
-from tkinter import ttk
-from PIL import ImageTk, Image
-from tkinter import messagebox
+#Import relevant modules
+from tkinter import Tk, Label, Frame, messagebox, Button, Canvas, Scrollbar, Entry, Spinbox, VERTICAL, BOTH
+from PIL import ImageTk, Image, ImageFilter, ImageEnhance
+
+#Define important variables used throughout the program
 window = Tk()
-window.config(bg="white")
-user = ""
-password = ""
-order = []
-total = 0
-cafemenu = {
-    0 : ["Hot Noodles", 3.80, "Instant noodles in a cup (chicken beef, or spicy)", "noodles.jpg"], 
-    1 : ["Spaghetti Bun", 1.50, "Spaghetti tossed in a flavorful sauce and served between soft buns", "spaghetti.png"], 
-    2 : ["Garlic Bread", 2.00, "Freshly baked bread infused with aromatic garlic and butter, toasted to perfection", "garlic.png"], 
-    3 : ["Hot Dogs", 4.00, "Juicy sausages served in a soft bun", "hotdog.png"], 
+window.config(bg = "white")
+user = ""   #Users login credentials
+password = ""   
+order = []  #Tracks the user's order
+total = 0   #Tracks the total cost of the user's order
+cafemenu = {#Contains all the information about the items in the menu
+    0 : ["Hot Noodles", 3.80, "Instant noodles in rows cup (chicken beef, or spicy)", "noodles.png"], 
+    1 : ["Spaghetti Bun", 1.50, "Spaghetti tossed in rows flavorful sauce and served between soft buns", "spaghetti.png"], 
+    2 : ["Garlic Bread", 2.00, "Freshly baked bread infused with aromatic garlic and butter, toasted to perfection", "garlicbread.png"], 
+    3 : ["Hot Dogs", 4.00, "Juicy sausages served in rows soft bun", "hotdog.png"], 
     4 : ["Steam Buns", 3.70, "Soft and fluffy steamed buns filled with various savory fillings", "steambuns.png"], 
-    5 : ["Peters Pie", 4.80, "Savory pies with a flaky crust and a meat filling", "peter.png"],
-    6 : ["Salads", 7.50, "Fresh and crisp salad greens topped with a variety of vegetables, proteins, and dressings", "salad.jpg"],
-    7 : ["Sandwiches", 4.80, "Made with fresh bread and filled with a selection of meats, cheeses, and vegetables", "sandwich.jpg"], 
-    8 : ["Sandwiches (Gluten Free)", 5.80, "Gluten-free bread filled with a selection of meats, cheeses, and vegetables", "gluten.jpg"], 
-    9 : ["Chicken Sub", 4.80, "A hearty sandwich filled with tender grilled chicken and fresh vegetables", "chickensub.jpg"], 
-    10 : ["Pizza Bread", 3.80, "Bread topped with cheese, tomato sauce, and various toppings for a pizza-like flavor", "pizzabread.jpg"], 
-    11 : ["Wraps", 5.50, "Soft tortilla wraps filled with a variety of ingredients", "wrap.jpg"],
-    12 : ["Potato chips", 2.50, " Crispy and flavorful potato chips", "chips.jpg"], 
-    13 : ["Mrs Higgins Cookies", 3.80, "Delicious chocolate chip cookies", "cookies.jpeg"], 
-    14 : ["Juicies", 1.00,"Refreshing fruit juice frozen into a convenient and delicious ice block, available in various flavors", "juicies.png"], 
-    15 : ["Coconut Juicies", 2.50, "Refreshing coconut-flavored ice blocks", "coconuts.png"], 
-    16 : ["Moosies", 2.00, "Creamy and indulgent ice cream bars", "moosies.jpg"],
-    17 : ["Slushies", 2.50, "Icy and refreshing drinks available in a range of fruity flavors", "slushy.jpg"],
+    5 : ["Peters Pie", 4.80, "Savory pies with rows flaky crust and rows meat filling", "pie.png"],
+    6 : ["Salads", 7.50, "Fresh and crisp salad greens topped with rows variety of vegetables, proteins, and dressings", "salad.png"],
+    7 : ["Sandwiches", 4.80, "Made with fresh bread and filled with rows selection of meats, cheeses, and vegetables", "sandwiches.png"], 
+    8 : ["Gluten Free Sandwiches", 5.80, "Gluten-free bread filled with rows selection of meats, cheeses, and vegetables", "gluten.png"], 
+    9 : ["Chicken Sub", 4.80, "A hearty sandwich filled with tender grilled chicken and fresh vegetables", "chickensub.png"], 
+    10 : ["Pizza Bread", 3.80, "Bread topped with cheese, tomato sauce, and various toppings for rows pizza-like flavor", "pizzabread.png"], 
+    11 : ["Wraps", 5.50, "Soft tortilla wraps filled with rows variety of ingredients", "wrap.png"],
+    12 : ["Potato chips", 2.50, " Crispy and flavorful potato chips", "chips.png"],
+    13 : ["Mrs Higgins Cookies", 3.80, "Delicious chocolate chip cookies", "cookies.png"], 
+    14 : ["Juicies", 1.00,"Refreshing fruit juice frozen into rows convenient and delicious ice block, available in various flavors", "juicies.png"], 
+    15 : ["Coconut Juicies", 2.50, "Refreshing coconut-flavored ice blocks", "coconut.png"], 
+    16 : ["Moosies", 2.00, "Creamy and indulgent ice cream bars", "moosies.png"],
+    17 : ["Slushies", 2.50, "Icy and refreshing drinks available in rows range of fruity flavors", "slushy.png"],
     18 : ["Water", 2.50, "Pure NZ Spring Water 600ml", "water.png"],    
-    19 : ["Lipton Ice Tea", 4.50, "Chilled and refreshing iced tea", "tea.jpg"], 
-    20 : ["Aloe Ice Tea", 4.50, "A unique blend of iced tea infused with the soothing and refreshing taste of aloe vera", "aloe.jpg"],
-    21 : ["Barista Bros Chocolate", 4.50, "Rich and creamy chocolate milk made with the finest ingredients, providing a decadent and satisfying drink", "baristabros.png"], 
-    22 : ["Hot Chocolate", 2.50, "A comforting and velvety smooth beverage made with warm milk and premium cocoa powder", "hotchocolate.jpg"], 
-    23 : ["Powerade", 4.50, "A refreshing sports drink designed to replenish electrolytes and provide hydration during physical activities", "powerade.jpg"]}
-images = {}
-def menu_full():
+    19 : ["Lipton Ice Tea", 4.50, "Chilled and refreshing iced tea", "lipton.png"], 
+    20 : ["Aloe Ice Tea", 4.50, "A unique blend of iced tea infused with the soothing and refreshing taste of aloe vera", "aloe.png"],
+    21 : ["Barista Bros Chocolate", 4.50, "Rich and creamy chocolate milk made with the finest ingredients, providing rows decadent and satisfying drink", "barista.png"], 
+    22 : ["Hot Chocolate", 2.50, "A comforting and velvety smooth beverage made with warm milk and premium cocoa powder", "chocolate.png"], 
+    23 : ["Powerade", 4.50, "A refreshing sports drink designed to replenish electrolytes and provide hydration during physical activities", "powerade.png"]}
+
+def home_page():
+    #Page setup for home page
+    global home, login_img, order_img, logo_img, background
+    home = Frame(window, bg="white")
+    home.grid(sticky="nsew")
+    window.title("BDSC Cafe online order")
+    window.geometry("780x400")
+
+    #Change the home page to match whether the user is logged in or not
+
+    #Home screen buttons
+    Label(home, text="BDSC Cafe Online Order", bg="White", font=("Arial Bold", 35), fg="#5f0137").grid(row=1, column=0, columnspan=4, padx=25, pady=10, sticky="nsew")
+    order_img = ImageTk.PhotoImage(Image.open("Internal assessment/Iteration 5/images/order.png").resize((40, 25)))
+    Button(home, text="Order food", image=order_img, compound="left", bg="#5f0137", fg="white", width=250, font=("Calibri Bold", 25), command=lambda:[home.grid_forget(), menu()]).grid(row=2, column=0, columnspan=4)
+
+    login_img = ImageTk.PhotoImage(Image.open("Internal assessment/Iteration 5/images/login.png").resize((40, 25)))
+    Button(home, text="Login", image=login_img, compound="left", bg="#5f0137", fg="white", width=250, font=("Calibri Bold", 25), command=lambda: [home.grid_forget(), login()]).grid(row=3, column=0, pady=10, columnspan=4)
+
+#Brings up the login page
+def login():
+    #Creates the frame and sets the title for login page
+    global loginwindow
+    loginwindow = Frame(window, bg="white")
+    loginwindow.grid(sticky="nsew")
+    window.title("Login")
+    window.geometry("780x400")
+
+    #Login page widgets
+    Label(loginwindow, text="BDSC Cafe Online Order", fg="#5f0137", bg="white", font=("Calibri Bold", 30)).grid(row=1, column=0, columnspan=2, sticky="nsew", pady=10)
+    Label(loginwindow, text="Login", bg="white", fg="#5f0137", font=("Comic Sans MS", 25)).grid(row=2, column=0, padx=10, pady=10, columnspan=2)
+
+    Label(loginwindow, text="Username", fg="#5f0137", bg="white", font=("Calibri Bold", 15)).grid(row=3, column=0, pady=10, sticky="e")
+    username_entry = Entry(loginwindow,font=("Calibri", 12), highlightthickness=2, highlightbackground="#5f0137")
+    username_entry.grid(row=3, column=1, padx=10, pady=10, sticky="w")
+
+    Label(loginwindow, text="Password", fg="#5f0137", bg="white", font=("Calibri Bold", 15)).grid(row=4, column=0, sticky="e")
+    password_entry = Entry(loginwindow, show="•", font=("Calibri", 12), highlightthickness=2, highlightbackground="#5f0137")
+    password_entry.grid(row=4, column=1, padx=10, sticky="w")
+
+    messages = Label(loginwindow, fg="#5f0137", bg="white", font=("Calibri", 15))
+    messages.grid(row=5, columnspan=3, pady=10)
+
+    Button(loginwindow, text="Login", bg="#5f0137", fg="white", font=("Calibri", 15), command=lambda: check_login(loginwindow)).grid(row=6, column=0, columnspan=2)
+    Button(loginwindow, text="Register", bg="#5f0137", fg="white", font=("Calibri", 15), command=lambda: [loginwindow.grid_forget(), register()]).grid(row=6, column=1, padx=(100,0), sticky="w")
+    Button(loginwindow, text="Back", bg="#5f0137", fg="white", font=("Calibri", 15), command=lambda: [loginwindow.grid_forget(), home_page()]).grid(row=6, column=0, sticky="e")  
+
+    #Checks if the user has entered the correct credentials
+    def check_login(loginwindow):
+        global user, password
+        username = username_entry.get()
+        passwords = password_entry.get()
+        try:
+            with open("saved_accounts.txt", 'r') as file:
+                if len(file.read()) == 0:
+                    messages.config(text="No accounts saved. Please register an account")
+            with open("saved_accounts.txt", 'r') as file:
+                for line in file:
+                    if username in line:
+                        if username == line.split(" : ")[0] and passwords == line.split(" : ")[1].strip():
+                            loginwindow.grid_forget()
+                            user = username
+                            password = passwords
+                            home_page()
+                            break
+                        else:
+                            messages.config(text="Invalid Credentials.")
+                    else:
+                        messages.config(text="Incorrect credentials. Please try again")
+        except IOError:
+            messages.config(text="No accounts saved. Please register an account")
+            with open("saved_accounts.txt", 'w') as file:
+                file.close()
+                
+#Page for the user to register an account
+def register():
+    #Page setup for register page
+    global registerwindow
+    registerwindow = Frame(window, bg="white")
+    registerwindow.grid(sticky="nsew")
+    window.title("Register")
+    window.geometry("780x450")
+
+    #Register page widgets
+    Label(registerwindow, text="BDSC Cafe Online Order", bg="white", font=("Calibri Bold", 30), fg="#5f0137").grid(row=1, column=0, columnspan= 2, padx=5, pady=10, sticky="nsew")
+    Label(registerwindow, text="Register account", bg="white", fg="#5f0137", font=("Comic Sans MS", 25)).grid(row=2, column=0, padx=10, pady=10, columnspan=2)
+
+    Label(registerwindow, text="Username", bg="white", fg="#5f0137", font=("Calibri Bold", 15)).grid(row=3, column=0, padx=10, pady=10, sticky="e")
+    username_entry = Entry(registerwindow, bg="white", font=("Calibri", 12), highlightthickness=2, highlightbackground="#5f0137")
+    username_entry.grid(row=3, column=1, padx=10, pady=10, sticky="w")
+
+    Label(registerwindow, text="Password", bg="white", fg="#5f0137", font=("Calibri Bold", 15)).grid(row=4, column=0, padx=10, pady=10, sticky="e")
+    password_entry = Entry(registerwindow, show="•", bg="white", font=("Calibri", 12), highlightthickness=2, highlightbackground="#5f0137")
+    password_entry.grid(row=4, column=1, padx=10, pady=10, sticky="w")
+
+    Label(registerwindow, text="Age", bg="white", fg="#5f0137", font=("Calibri Bold", 15)).grid(row=5, column=0, padx=10, sticky="e")
+    age_entry = Spinbox(registerwindow, bg="white",font=("Calibri", 12), from_=1, to=100, highlightthickness=2, highlightbackground="#5f0137")
+    age_entry.grid(row=5, column=1, padx=10, sticky="w")
+
+    message = Label(registerwindow, text="", bg="white", fg="#5f0137", font=("Calibri Bold", 15))
+    message.grid(row=6, columnspan=3, pady=10)
+
+    Button(registerwindow, text="Register", bg="#5f0137", fg="white", font=("Calibri", 15), command=lambda: register_account()).grid(row=7, column=0, columnspan=2)
+    Button(registerwindow, text="Login", bg="#5f0137", fg="white", font=("Calibri", 15), command=lambda: [registerwindow.grid_forget(), login()]).grid(row=7, column=1, padx=(110,0), sticky="w")
+    Button(registerwindow, text="Back", bg="#5f0137", fg="white", font=("Calibri", 15), command=lambda: [registerwindow.grid_forget(), home_page()]).grid(row=7, column=0, sticky="e", padx=20)  
+
+    #Function used to save the account into the external text file
+    def register_account():
+        global user, password
+        username = username_entry.get()
+        passwords = password_entry.get()
+        age = int(age_entry.get())
+        if username != "" and passwords != "":
+            if 13 <= age <= 18:
+                while True:
+                    try:
+                        with open("saved_accounts.txt", 'a') as file:
+                            file.write(f"{username} : {passwords} : {age}\n")
+                            file.close()
+                            message.config(text="Account created successfully")
+                            registerwindow.grid_forget()
+                            user = username
+                            password = passwords
+                            home_page()
+                            break
+                    except IOError:
+                        with open("saved_accounts.txt", 'w') as file:
+                            file.close()
+            else:
+                message.config(text="You are not eligible to register an account")
+        else:
+            message.config(text="Please fill in all the boxes")
+
+#The order page where the user can make their order
+def menu():
+    global menu_page, order_items
     menu = Frame(window, bg="white")
     menu.grid(row=0, column=0, sticky="nsew")
-    canvass = Canvas(menu, width=1000, height=600, bg="white")
-    canvass.grid(row=1, column=0, sticky="nsew")
+    menu_page = Canvas(menu, width=1000, height=600, bg="white")
+    menu_page.grid(row=1, column=0, sticky="nsew")
 
 
     menu_title = Label(menu, text="Menu", font=("Arial Bold", 20), bg="white")
     menu_title.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
 
-    scroll = Scrollbar(menu, orient=VERTICAL, command=canvass.yview)
+    scroll = Scrollbar(menu, orient=VERTICAL, command=menu_page.yview)
     scroll.grid(row=0, rowspan=4, column=2, sticky="ns")
 
-    canvass.configure(yscrollcommand=scroll.set)
-    canvass.bind('<Configure>', lambda e: canvass.configure(scrollregion=canvass.bbox("all")))
-    second_frame = Frame(canvass)
-    canvass.create_window((0,0), window=second_frame, anchor="nw")
+    menu_page.configure(yscrollcommand=scroll.set)
+    menu_page.bind('<Configure>', lambda e: menu_page.configure(scrollregion=menu_page.bbox("all")))
+    order_items = Frame(menu_page)
+    #Function for scrolling the canvas with the mousewheel
+    def scrolling(event):
+        menu_page.yview_scroll(-int(event.delta/120), "units")
+
+    #Bind scrolling action to the mousewheel and scrollbar
+    order_items.bind("<Configure>", scrolling)
+    menu_page.bind_all("<MouseWheel>", scrolling)
+    menu_page.create_window((0,0), window=order_items, anchor="nw")
+    images = {} #Save the images in a dictionary to be used later
+    item_position = 0   #Position the item in the correct row
 
 
-    for a in range(12):
-        global images
-        image_path = f"Internal assessment/Iteration 4/images/{cafemenu[a][3]}"
-        item_image = ImageTk.PhotoImage(Image.open(image_path).resize((150, 100)))
-        image_path2 = f"Internal assessment/Iteration 4/images/{cafemenu[a+12][3]}"
-        item_image2 = ImageTk.PhotoImage(Image.open(image_path2).resize((150, 100)))
-        images[a] = [item_image, item_image2]  # Store the PhotoImage object in the dictionary
+    #For loop which creates the menu items
+    for rows in range(8):
+        img = []  #List to save the images in
+        for columns in range(3):
+            path = f"Internal assessment/Iteration 5/images/{cafemenu[rows+rows*2+columns][3]}"
+            filter_img = Image.open(f"Internal assessment/Iteration 5/images/{cafemenu[rows+rows*2+columns][3]}").resize((200, 200)).filter(ImageFilter.GaussianBlur(10))
+            filter_img = ImageEnhance.Brightness(filter_img).enhance(0.3)
+            img.append([ImageTk.PhotoImage(Image.open(path).resize((200, 200))),ImageTk.PhotoImage(filter_img)])
         
-        Label(second_frame, image=images[a][0], bg="white").grid(row=a, column=0, padx=10, pady=10)
-        Button(second_frame, text=f"{cafemenu[a+1][0]}").grid(row=a, column=1, padx=10, pady=10)
-        Spinbox(second_frame, from_=0, to=10).grid(row=a, column=2, padx=10, pady=10)
-        Label(second_frame, image=images[a][1], bg="white").grid(row=a, column=3, padx=10, pady=10)
-        Button(second_frame, text=f"{cafemenu[a+1][0]}").grid(row=a, column=4, padx=10, pady=10)
-        Spinbox(second_frame, from_=0, to=10).grid(row=a, column=5, padx=10, pady=10)
-        canvass.create_line(50, 50, 200, 200)
+        images[rows] = img  #Save the images into a dictionary to prevent them from being garbage collected
+        
 
-menu_full()
+        #Create the menu items
+        for frames in range(3):
+            f = Frame(order_items, bg="White", highlightbackground="light grey", highlightthickness=1)
+            f.grid(row=rows+item_position, column=frames, padx=30, pady=30)
+
+            lbl = Label(f, image=images[rows][frames][0])
+            lbl.grid(row=0, column=0, columnspan=2)
+
+            lbl.bind("<Leave>", lambda event, arg = images[rows][frames][0]: hide_text(event, arg))
+            Label(f, text=f"{cafemenu[rows+rows*2+frames][0]} - ${cafemenu[rows+rows*2+frames][1]:.2f}", bg="white", font=("Calibri Bold", 15)).grid(row=1, column=0, columnspan=2)
+            amounts = Spinbox(f, from_=1, to=100, width=5, font=("Calibri Bold", 12))
+            amounts.grid(row=2, column=1, padx=10, pady=10)
+            Button(f, text="Add to Order", font=("Calibri Bold", 12), command=lambda rows=rows, amounts=amounts, frames=frames: add_to_order(cafemenu[rows+rows*2+frames][0], int(amounts.get()), cafemenu[rows+rows*2+frames][1])).grid(row=2, column=0, padx=10, pady=10)
+
+    #Create the total price label and checkout button
+    price_lbl = Label(menu, text=f"Total Price - ${total:.2f}", font=("Calibri", 14), bg="#5f0137", fg="White")
+    price_lbl.grid(row=2, columnspan=3, padx=(10, 100), pady=10, sticky="e")
+    checkout_button = Button(menu, text="Checkout", font=("Calibri", 12), bg="#5f0137", fg="white", command= lambda: [menu.grid_forget(), checkout()])
+    checkout_button.grid(row=2, columnspan=3, padx=10, pady=10, sticky="e")
+
+    #Function used to add items to the order
+    def add_to_order(item, amount, price):
+        global order, total
+        if amount == 0:
+            messagebox.showerror("Error", "Please enter a valid amount")
+            return
+        total += price * amount
+        order.append(f"{amount}x {item}")
+        price_lbl.config(text=f"Total Price - ${total:.2f}")
+
+
+
+home_page()
 window.mainloop()
