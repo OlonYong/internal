@@ -1,0 +1,343 @@
+from tkinter import *
+from tkinter import ttk
+from PIL import ImageTk, Image
+from tkinter import messagebox
+window = Tk()
+window.config()
+user = ""
+password = ""
+order= []
+total = 0
+menu = {
+    "Hot Noodles" : [3.80, "Instant noodles in a cup (chicken beef, or spicy)"], 
+    "Spaghetti Bun" : [1.50, "Spaghetti tossed in a flavorful sauce and served between soft buns"], 
+    "Garlic Bread" : [2.00, "Freshly baked bread infused with aromatic garlic and butter, toasted to perfection"], 
+    "Hot Dogs" : [4.00, "Juicy sausages served in a soft bun"], 
+    "Steam Buns" : [3.70, "Soft and fluffy steamed buns filled with various savory fillings"], 
+    "Peters Pie" : [4.80, "Savory pies with a flaky crust and a meat filling"],
+    "Salads" : [7.50, "Fresh and crisp salad greens topped with a variety of vegetables, proteins, and dressings"],
+    "Sandwiches" : [4.80, "Made with fresh bread and filled with a selection of meats, cheeses, and vegetables"], 
+    "Sandwiches (Gluten Free)" : [5.80, "Gluten-free bread filled with a selection of meats, cheeses, and vegetables"], 
+    "Chicken Sub" : [4.80, "A hearty sandwich filled with tender grilled chicken and fresh vegetables"], 
+    "Pizza Bread" : [3.80, "Bread topped with cheese, tomato sauce, and various toppings for a pizza-like flavor"], 
+    "Wraps" : [5.50, "Soft tortilla wraps filled with a variety of ingredients"],
+    "Potato chips" : [2.50, " Crispy and flavorful potato chips"], 
+    "Mrs Higgins Cookies" : [3.80, "Delicious chocolate chip cookies"], 
+    "Juicies" : [1.00,"Refreshing fruit juice frozen into a convenient and delicious ice block, available in various flavors"], 
+    "Coconut Juicies" : [2.50, "Refreshing coconut-flavored ice blocks"], 
+    "Moosies" : [2.00, "Creamy and indulgent ice cream bars"],
+    "Slushies" : [2.50, "Icy and refreshing drinks available in a range of fruity flavors"],
+    "Water" : [2.50, "Pure NZ Spring Water 600ml"], 
+    "Lipton Ice Tea" : [4.50, "Chilled and refreshing iced tea"], 
+    "Aloe Ice Tea" : [4.50, "A unique blend of iced tea infused with the soothing and refreshing taste of aloe vera"],
+    "Barista Bros Chocolate" : [4.50, "Rich and creamy chocolate milk made with the finest ingredients, providing a decadent and satisfying drink"], 
+    "Hot Chocolate" : [2.50, "A comforting and velvety smooth beverage made with warm milk and premium cocoa powder"], 
+    "Powerade" : [4.50, "A refreshing sports drink designed to replenish electrolytes and provide hydration during physical activities"]}
+
+def first_menu():
+    global initial, login_img, order_img, checkout_img, logo_img, view_img
+    initial = Frame(window, )
+    initial.grid(sticky="nsew")
+    window.title("BDSC Cafe click and collect")
+    window.geometry("500x400")
+
+    title = Label(initial, text="BDSC Cafe Online Order", font=("Arial Bold", 20))
+    title.grid(row=0, column=1, columnspan=4, padx=25, pady=10, sticky="nsew")
+
+    title2 = Label(initial, text="Main Menu")
+    title2.grid(row=1, column=1, padx=10, pady=10, columnspan=3)
+
+    logo_img = ImageTk.PhotoImage(Image.open("images/logo.png").resize((100,70)))
+    logo_lbl = Label(initial, image=logo_img, )
+    logo_lbl.grid(row=0, column=0, pady=10)
+
+    order_img = ImageTk.PhotoImage(Image.open("images/order.png").resize((40, 25)))
+    order_btn = Button(initial, text="Order food", image=order_img, compound="left", bg="Black", fg="White", width=250, command=lambda:[order_screen(), initial.grid_forget()])
+    order_btn.grid(row=2, column=1, columnspan=3, pady=10)
+    
+    view_img = ImageTk.PhotoImage(Image.open("images/view.png").resize((40, 25)))
+    view_btn = Button(initial, text="View order", image=view_img, compound="left", bg="Black", fg="White", width=250, command=lambda: [initial.grid_forget(), view_order()])
+    view_btn.grid(row=3, column=1, columnspan=3, pady=10)
+
+    checkout_img = ImageTk.PhotoImage(Image.open("images/checkout.png").resize((40, 25)))
+    checkout_btn = Button(initial, text="Checkout order", image=checkout_img, compound="left", bg="Black", fg="White", width=250, command=lambda: [initial.grid_forget(), checkouts()])
+    checkout_btn.grid(row=4, column=1, columnspan=3, pady=10)
+
+    login_img = ImageTk.PhotoImage(Image.open("images/login.png").resize((40, 25)))
+    login_btn = Button(initial, text="User Login", image=login_img, compound="left", bg="Black", fg="White", width=250, command=lambda: [initial.grid_forget(), login()])
+    login_btn.grid(row=5, column=1, padx=10, pady=10, columnspan=3)
+
+def main_menu():
+    global main, logout_img, order_img, checkout_img, logo_img, view_img
+    main = Frame(window, )
+    main.grid(sticky="nsew")
+    window.title("BDSC Cafe click and collect")
+    window.geometry("500x400")
+
+    title = Label(main, text="BDSC Cafe Online Order", font=("Arial Bold", 20))
+    title.grid(row=0, column=1, columnspan=4, padx=25, pady=10, sticky="nsew")
+
+    title2 = Label(main, text="Main Menu")
+    title2.grid(row=1, column=1, padx=10, pady=10, columnspan=3)
+
+    logo_img = ImageTk.PhotoImage(Image.open("images/logo.png").resize((100,70)))
+    logo_lbl = Label(main, image=logo_img, )
+    logo_lbl.grid(row=0, column=0, pady=10)
+
+    order_img = ImageTk.PhotoImage(Image.open("images/order.png").resize((40, 25)))
+    order_btn = Button(main, text="Order food", image=order_img, compound="left", bg="Black", fg="White", width=250, command=lambda:[order_screen(), main.grid_forget()])
+    order_btn.grid(row=2, column=1, columnspan=3, pady=10)
+    
+    view_img = ImageTk.PhotoImage(Image.open("images/view.png").resize((40, 25)))
+    view_btn = Button(main, text="View order", image=view_img, compound="left", bg="Black", fg="White", width=250, command=lambda: [main.grid_forget(), view_order()])
+    view_btn.grid(row=3, column=1, columnspan=3, pady=10)
+
+    checkout_img = ImageTk.PhotoImage(Image.open("images/checkout.png").resize((40, 25)))
+    checkout_btn = Button(main, text="Checkout order", image=checkout_img, compound="left", bg="Black", fg="White", width=250, command=lambda: [main.grid_forget(), checkouts()])
+    checkout_btn.grid(row=4, column=1, columnspan=3, pady=10)
+
+    logout_img = ImageTk.PhotoImage(Image.open("images/logout.png").resize((40, 25)))
+    logout_btn = Button(main, text="Log out", image=logout_img, compound="left", bg="Black", fg="White", width=250, command=lambda: [messagebox.showinfo("Logged out!", "Logged out successfully!"), first_menu(), main.grid_forget(), first_menu()])
+    logout_btn.grid(row=5, column=1, padx=10, pady=10, columnspan=3)
+
+def order_screen():
+    global frame3
+    global combo
+    global number
+    frame3 = Frame(window)
+    frame3.pack()
+    window.title("order food")
+    window.geometry("530x400")
+
+    title = Label(frame3, text="BDSC Cafe click and collect",font=("Comic Sans MS Bold", 20), pady=10)
+    title.pack()
+
+    title2 = Label(frame3, text="Order food", font=("Comic Sans MS", 15))
+    title2.pack(padx=10, pady=10)   
+
+#Another frame is used to position the spin box and combo box
+    inner_frame = Frame(frame3)
+    inner_frame.pack()
+
+#Users can choose their desired item and quantity using a combo box and spin box
+    combo = ttk.Combobox(inner_frame, values=[f"{item} - ${price:.2f}" for item, [price, _] in menu.items()], width=30)
+    combo.pack(side=LEFT)
+    combo.bind("<<ComboboxSelected>>", lambda event: description(combo, info))
+    combo.insert(0, "Select an item")
+    number = Spinbox(inner_frame, from_=1, to=999, width=3)
+    number.pack(side=LEFT, padx=10)
+
+    info = Label(frame3, text="")
+    info.pack()
+
+    add = Button(frame3, text="Add to order", command=lambda: add_item(combo, number, message))
+    add.pack(pady=10)
+#Return to the second frame
+    back = Button(frame3, text="Back", command=lambda: [frame3.pack_forget(), accountcheck()])
+    back.pack()
+#Give the user a description of the item they have selected
+    message = Label(frame3, text="")
+    message.pack()
+def description(combo,info):
+    item = combo.get()
+    item = item.split(" - ")[0]
+    if item !="":
+        info.config(text=menu[item][1])
+
+def add_item(combo, number, message):
+    global order
+    global total
+    item = (combo.get()).split(" - ")[0]
+    count = int(number.get())
+    if item != "Select an item":
+        order.append(f"{count}x {item}")
+        total += menu[item][0] * count
+        message.configure(text=f"{count}x {item} added to order")
+    else:
+        message.configure(text="Please select an item")
+
+def login():
+    global loginwindow, logo_img
+    loginwindow = Frame(window, )
+    loginwindow.grid(sticky="nsew")
+    window.title("Login")
+    window.geometry("500x400")
+
+    logo_img = ImageTk.PhotoImage(Image.open("images/logo.png").resize((100,70)))
+    logo_lbl = Label(loginwindow, image=logo_img, )
+    logo_lbl.grid(row=0, column=0, pady=10, sticky="w")
+
+    title = Label(loginwindow, text="BDSC Cafe click and collect", font=("Calibri", 20))
+    title.grid(row=0, column=1, columnspan=2, sticky="nsew")
+
+    title2 = Label(loginwindow, text="Login", font=("Comic Sans MS", 20))
+    title2.grid(row=1, column=1, padx=10, columnspan=2)
+
+    username = Label(loginwindow, text="Username", font=("Calibri Bold", 15))
+    username.grid(row=2, column=1, padx=10, pady=10)
+    username_entry = Entry(loginwindow,font=("Calibri", 12), highlightthickness=2, highlightbackground="#781d4b")
+    username_entry.grid(row=2, column=2, padx=10, pady=10)
+
+    password = Label(loginwindow, text="Password", font=("Calibri Bold", 15))
+    password.grid(row=3, column=1, padx=10, pady=10)
+    password_entry = Entry(loginwindow, font=("Calibri", 12), highlightthickness=2, highlightbackground="#781d4b")
+    password_entry.grid(row=3, column=2, padx=10, pady=10)
+
+    messages = Label(loginwindow)
+    messages.grid(row=4, columnspan=3, pady=10)
+
+    login_btn = Button(loginwindow, text="Login", bg="Black", fg="White", font=("Calibri", 12), command=lambda: check_login(username_entry, password_entry, messages))
+    login_btn.grid(row=5, column=1, columnspan=2, pady=10)
+
+    register_btn = Button(loginwindow, text="Register", bg="Black", fg="White", font=("Calibri", 12), command=lambda: [loginwindow.grid_forget(), register()])
+    register_btn.grid(row=5, column=2, pady=10, padx=20, sticky="e")
+
+    back_btn = Button(loginwindow, text="Back", bg="Black", fg="White", font=("Calibri", 12), command=lambda: back_menu(frame=loginwindow))
+    back_btn.grid(row=6, column=1, columnspan=2, pady=10)  
+
+def check_login(username_entry, password_entry, messages):
+    global user, password
+    user = username_entry.get()
+    password = password_entry.get()
+    try:
+        with open("saved.txt", 'r') as file:
+            if len(file.read()) == 0:
+                messages.config(text="No accounts saved. Please register an account")
+        with open("saved.txt", 'r') as file:
+            for line in file:
+                if user in line:
+                    if user == line.split(" : ")[0] and password == line.split(" : ")[1].strip():
+                        loginwindow.grid_forget()
+                        main_menu()
+                        break
+                    else:
+                        messages.config(text="Incorrect credentials. Please try again")
+    except IOError:
+        messages.config(text="No accounts saved. Please register an account")
+        with open("saved.txt", 'w') as file:
+            file.close()
+
+def register():
+    global registerwindow, logo_img
+    registerwindow = Frame(window, )
+    registerwindow.grid(sticky="nsew")
+    window.title("Register")
+    window.geometry("500x460")
+    initial.grid_forget()
+
+    title = Label(registerwindow, text="BDSC Cafe Online Order", font=("Arial Bold", 20))
+    title.grid(row=0, column=1, columnspan= 3, padx=5, pady=10, sticky="nsew")
+
+    logo_img = ImageTk.PhotoImage(Image.open("images/logo.png").resize((100,70)))
+    logo_lbl = Label(registerwindow, image=logo_img, )
+    logo_lbl.grid(row=0, column=0, pady=10, sticky="w")
+
+    title2 = Label(registerwindow, text="Register account", font=("Comic Sans MS", 20))
+    title2.grid(row=1, column=1, padx=10, pady=10, columnspan=2)
+
+    username = Label(registerwindow, text="Username", font=("Calibri Bold", 15))
+    username.grid(row=2, column=1, padx=10, pady=10)
+    username_entry = Entry(registerwindow, font=("Calibri Bold", 12), highlightthickness=2, highlightbackground="#781d4b")
+    username_entry.grid(row=2, column=2, padx=10, pady=10)
+
+    password = Label(registerwindow, text="Password", font=("Calibri Bold", 15))
+    password.grid(row=3, column=1, padx=10, pady=10)
+    password_entry = Entry(registerwindow, font=("Calibri", 12), highlightthickness=2, highlightbackground="#781d4b")
+    password_entry.grid(row=3, column=2, padx=10, pady=10)
+
+    age = Label(registerwindow, text="Age", font=("Calibri Bold", 15))
+    age.grid(row=4, column=1, padx=10, pady=10)
+    age_entry = Spinbox(registerwindow,font=("Calibri", 12), from_=1, to=100, highlightthickness=2, highlightbackground="#781d4b")
+    age_entry.grid(row=4, column=2, padx=10, pady=10)
+
+    message = Label(registerwindow, text="", font=("Calibri Bold", 15))
+    message.grid(row=5, columnspan=3, pady=10)
+
+    register_btn = Button(registerwindow, text="Register", bg="Black", fg="White", font=("Calibri", 12), command=lambda: register_account(username_entry, password_entry, age_entry, message))
+    register_btn.grid(row=6, column=1, columnspan=2, pady=10)
+
+    login_btn = Button(registerwindow, text="Login", bg="Black", fg="White", font=("Calibri", 12), command=lambda: [registerwindow.grid_forget(), login()])
+    login_btn.grid(row=6, column=2, pady=10, padx=20, sticky="e")
+
+    back_btn = Button(registerwindow, text="Back", bg="Black", fg="White", font=("Calibri", 12), command=lambda: back_menu(frame=registerwindow))
+    back_btn.grid(row=7, column=1, columnspan=2, pady=10)  
+
+def register_account(username_entry, password_entry, age_entry, message):
+    user = username_entry.get()
+    password = password_entry.get()
+    age = int(age_entry.get())
+    if user != "" and password != "":
+        if 13 <= age <= 18:
+            while True:
+                try:
+                    with open("saved.txt", 'a') as file:
+                        file.write(f"{user} : {password} : {age}\n")
+                        file.close()
+                        message.config(text="Account created successfully")
+                        registerwindow.grid_forget()
+                        main_menu()
+                        break
+                except IOError:
+                    with open("saved.txt", 'w') as file:
+                        file.close()
+        else:
+            message.config(text="You are not eligible to register an account")
+    else:
+        message.config(text="Please fill in all the boxes")
+
+def back_menu(frame):
+    frame.grid_forget()
+    accountcheck()
+    
+def accountcheck():
+    if user == "" or password == "":
+        first_menu()
+    else:
+        main_menu()
+
+def view_order():
+    global frame4
+    frame4 = Frame(window)
+    frame4.pack()
+    window.title("View order")
+    window.geometry("530x400")
+
+    view = Label(frame4, text="View Order", font=("Comic Sans MS", 15))
+    view.pack(padx=10, pady=10)   
+    for item in order:
+        Label(frame4, text=item).pack()
+
+    Label(frame4, text=f"Total: ${total:.2f}").pack()
+
+    back = Button(frame4, text="Back", command=lambda: [frame4.pack_forget(), accountcheck()])
+    back.pack()
+
+def checkouts():
+    global frame5
+    frame5 = Frame(window)
+    frame5.pack()
+    window.title("Checkout")
+    window.geometry("530x400")
+
+
+    titles = Label(frame5, text="Checkout", font=("Comic Sans MS", 15))
+    titles.pack(padx=10, pady=10)   
+
+    title = Label(frame5, text="Your order is:",font=("Comic Sans MS", 10), pady=10)
+    title.pack()
+
+    for item in order:
+        Label(frame5, text=item).pack()
+
+    Label(frame5, text=f"Total: ${total:.2f}").pack()
+
+    if order != []:
+        confirm = Button(frame5, text="Confirm order", command=lambda: [frame5.pack_forget(), first_menu()])
+        confirm.pack(pady=10)
+
+    back = Button(frame5, text="Back", command=lambda: [frame5.pack_forget(), main_menu()])
+    back.pack()
+#This screen is shown when the user completes their order.
+
+first_menu()
+window.mainloop()
