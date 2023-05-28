@@ -9,30 +9,30 @@ password = ""
 order= []
 total = 0
 menu = {
-    "Hot Noodles" : [3.80, "Instant noodles in a cup (chicken beef, or spicy)"], 
-    "Spaghetti Bun" : [1.50, "Spaghetti tossed in a flavorful sauce and served between soft buns"], 
-    "Garlic Bread" : [2.00, "Freshly baked bread infused with aromatic garlic and butter, toasted to perfection"], 
-    "Hot Dogs" : [4.00, "Juicy sausages served in a soft bun"], 
-    "Steam Buns" : [3.70, "Soft and fluffy steamed buns filled with various savory fillings"], 
-    "Peters Pie" : [4.80, "Savory pies with a flaky crust and a meat filling"],
-    "Salads" : [7.50, "Fresh and crisp salad greens topped with a variety of vegetables, proteins, and dressings"],
-    "Sandwiches" : [4.80, "Made with fresh bread and filled with a selection of meats, cheeses, and vegetables"], 
-    "Sandwiches (Gluten Free)" : [5.80, "Gluten-free bread filled with a selection of meats, cheeses, and vegetables"], 
-    "Chicken Sub" : [4.80, "A hearty sandwich filled with tender grilled chicken and fresh vegetables"], 
-    "Pizza Bread" : [3.80, "Bread topped with cheese, tomato sauce, and various toppings for a pizza-like flavor"], 
-    "Wraps" : [5.50, "Soft tortilla wraps filled with a variety of ingredients"],
-    "Potato chips" : [2.50, " Crispy and flavorful potato chips"], 
-    "Mrs Higgins Cookies" : [3.80, "Delicious chocolate chip cookies"], 
-    "Juicies" : [1.00,"Refreshing fruit juice frozen into a convenient and delicious ice block, available in various flavors"], 
-    "Coconut Juicies" : [2.50, "Refreshing coconut-flavored ice blocks"], 
-    "Moosies" : [2.00, "Creamy and indulgent ice cream bars"],
-    "Slushies" : [2.50, "Icy and refreshing drinks available in a range of fruity flavors"],
-    "Water" : [2.50, "Pure NZ Spring Water 600ml"], 
-    "Lipton Ice Tea" : [4.50, "Chilled and refreshing iced tea"], 
-    "Aloe Ice Tea" : [4.50, "A unique blend of iced tea infused with the soothing and refreshing taste of aloe vera"],
-    "Barista Bros Chocolate" : [4.50, "Rich and creamy chocolate milk made with the finest ingredients, providing a decadent and satisfying drink"], 
-    "Hot Chocolate" : [2.50, "A comforting and velvety smooth beverage made with warm milk and premium cocoa powder"], 
-    "Powerade" : [4.50, "A refreshing sports drink designed to replenish electrolytes and provide hydration during physical activities"]}
+    "Hot Noodles" : [3.80, "Instant noodles in a cup (chicken beef, or spicy)", "noodles.png"], 
+    "Spaghetti Bun" : [1.50, "Spaghetti tossed in a flavorful sauce and served between soft buns", "spaghetti.png"], 
+    "Garlic Bread" : [2.00, "Freshly baked bread infused with aromatic garlic and butter, toasted to perfection", "garlicbread.png"], 
+    "Hot Dogs" : [4.00, "Juicy sausages served in a soft bun", "hotdog.png"], 
+    "Steam Buns" : [3.70, "Soft and fluffy steamed buns filled with various savory fillings", "steambuns.png"], 
+    "Peters Pie" : [4.80, "Savory pies with a flaky crust and a meat filling", "pie.png"],
+    "Salads" : [7.50, "Fresh and crisp salad greens topped with a variety of vegetables, proteins, and dressings", "salad.png"],
+    "Sandwiches" : [4.80, "Made with fresh bread and filled with a selection of meats, cheeses, and vegetables", "sandwiches.png"], 
+    "Sandwiches (Gluten Free)" : [5.80, "Gluten-free bread filled with a selection of meats, cheeses, and vegetables", "gluten.png"], 
+    "Chicken Sub" : [4.80, "A hearty sandwich filled with tender grilled chicken and fresh vegetables", "chickensub.png"], 
+    "Pizza Bread" : [3.80, "Bread topped with cheese, tomato sauce, and various toppings for a pizza-like flavor", "pizzabread.png"], 
+    "Wraps" : [5.50, "Soft tortilla wraps filled with a variety of ingredients", "wrap.png"],
+    "Potato chips" : [2.50, " Crispy and flavorful potato chips", "chips.png"], 
+    "Mrs Higgins Cookies" : [3.80, "Delicious chocolate chip cookies", "cookies.png"], 
+    "Juicies" : [1.00,"Refreshing fruit juice frozen into a convenient and delicious ice block, available in various flavors", "juicies.png"], 
+    "Coconut Juicies" : [2.50, "Refreshing coconut-flavored ice blocks", "coconut.png"], 
+    "Moosies" : [2.00, "Creamy and indulgent ice cream bars", "moosies.png"],
+    "Slushies" : [2.50, "Icy and refreshing drinks available in a range of fruity flavors", "slushy.png"],
+    "Water" : [2.50, "Pure NZ Spring Water 600ml", "water.png"], 
+    "Lipton Ice Tea" : [4.50, "Chilled and refreshing iced tea", "lipton.png"], 
+    "Aloe Ice Tea" : [4.50, "A unique blend of iced tea infused with the soothing and refreshing taste of aloe vera", "aloe.png"],
+    "Barista Bros Chocolate" : [4.50, "Rich and creamy chocolate milk made with the finest ingredients, providing a decadent and satisfying drink", "barista.png"], 
+    "Hot Chocolate" : [2.50, "A comforting and velvety smooth beverage made with warm milk and premium cocoa powder", "chocolate.png"], 
+    "Powerade" : [4.50, "A refreshing sports drink designed to replenish electrolytes and provide hydration during physical activities", "powerade.png"]}
 
 def first_menu():
     global initial, login_img, order_img, checkout_img, logo_img, view_img
@@ -52,7 +52,7 @@ def first_menu():
     logo_lbl.grid(row=0, column=0, pady=10)
 
     order_img = ImageTk.PhotoImage(Image.open("images/order.png").resize((40, 25)))
-    order_btn = Button(initial, text="Order food", image=order_img, compound="left", bg="Black", fg="White", width=250, command=lambda:[order_screen(), initial.grid_forget()])
+    order_btn = Button(initial, text="Order food", image=order_img, compound="left", bg="Black", fg="White", width=250, command=lambda:[initial.grid_forget(), order_screen()])
     order_btn.grid(row=2, column=1, columnspan=3, pady=10)
     
     view_img = ImageTk.PhotoImage(Image.open("images/view.png").resize((40, 25)))
@@ -101,43 +101,26 @@ def main_menu():
     logout_btn.grid(row=5, column=1, padx=10, pady=10, columnspan=3)
 
 def order_screen():
-    global frame3
-    global combo
-    global number
+    global frame3, number, pics
     frame3 = Frame(window)
     frame3.grid()
     window.title("order food")
-    window.geometry("530x400")
+    window.geometry("1000x600")
 
-    title = Label(frame3, text="BDSC Cafe click and collect",font=("Comic Sans MS Bold", 20), pady=10)
-    title.grid()
 
-    title2 = Label(frame3, text="Order food", font=("Comic Sans MS", 15))
-    title2.grid(padx=10, pady=10)   
+    pics = []
+    for items in menu:
+        print(items)
+        print(menu[items][1][2])
+        photo = ImageTk.PhotoImage(Image.open(f"images/{menu[items][2]}").resize((200, 200)))
+        pics.append(photo)
 
-#Another frame is used to position the spin box and combo box
-    inner_frame = Frame(frame3)
-    inner_frame.grid()
+    for a in range(2):
+        for b in range(4):  
+            Label(window, image=pics[a*4+b]).grid(row=a*2, column=b, padx=10, pady=10)
+            number = Spinbox(window, from_=1, to=100)
+            number.grid(row=a*2+1, column=b, padx=10, pady=10)
 
-#Users can choose their desired item and quantity using a combo box and spin box
-    combo = ttk.Combobox(inner_frame, values=[f"{item} - ${price:.2f}" for item, [price, _] in menu.items()], width=30)
-    combo.grid()
-    combo.bind("<<ComboboxSelected>>", lambda event: description(combo, info))
-    combo.insert(0, "Select an item")
-    number = Spinbox(inner_frame, from_=1, to=999, width=3)
-    number.grid()
-
-    info = Label(frame3, text="")
-    info.grid()
-
-    add = Button(frame3, text="Add to order", command=lambda: add_item(combo, number, message))
-    add.grid(pady=10)
-#Return to the second frame
-    back = Button(frame3, text="Back", command=lambda: [frame3.grid_forget(), accountcheck()])
-    back.grid()
-#Give the user a description of the item they have selected
-    message = Label(frame3, text="")
-    message.grid()
 def description(combo,info):
     item = combo.get()
     item = item.split(" - ")[0]
