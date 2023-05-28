@@ -1,4 +1,3 @@
-from tkinter import *
 #Import relevant modules
 from tkinter import Tk, Label, Frame, messagebox, Button, Canvas, Scrollbar, Entry, Spinbox, VERTICAL, BOTH
 from PIL import ImageTk, Image, ImageFilter, ImageEnhance
@@ -36,35 +35,45 @@ cafemenu = {#Contains all the information about the items in the menu
     22 : ["Hot Chocolate", 2.50, "A comforting and velvety smooth beverage made with warm milk and premium cocoa powder", "chocolate.png"], 
     23 : ["Powerade", 4.50, "A refreshing sports drink designed to replenish electrolytes and provide hydration during physical activities", "powerade.png"]}
 
-#The order page where the user can make their order
 def menu():
-    global menu_page, order_items
-    menu = Frame(window, bg="white")
-    menu.grid(row=0, column=0, sticky="nsew")
-    menu_page = Canvas(menu, width=1000, height=600, bg="white")
-    menu_page.grid(row=1, column=0, sticky="nsew")
+    #Page setup for menu page
+    global menu_page, images
+    window.geometry("960x550")
+    menu = Frame(window, bg="#5f0137")
+    menu.grid(row=1, column=0, sticky="nsew")
 
+    #Resize the frame to fit the canvas
+    window.grid_rowconfigure(1, weight=1) 
+    window.grid_columnconfigure(0, weight=1)
+    menu.grid_rowconfigure(1, weight=1)  
+    menu.grid_columnconfigure(0, weight=1)
 
-    menu_title = Label(menu, text="Menu", font=("Arial Bold", 20), bg="white")
-    menu_title.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
+    #Create and configure the canvas
+    menu_page = Canvas(menu, bg="White")
+    menu_page.grid(row=1, column=0, sticky="nsew", padx=(0, 0))
+    order_items = Frame(menu_page, bg="White") #Inner frame to hold the menu items
+    menu_page.create_window((0,0), window=order_items, anchor="nw")
 
-    scroll = Scrollbar(menu, orient=VERTICAL, command=menu_page.yview)
-    scroll.grid(row=0, rowspan=4, column=2, sticky="ns")
+    #Create and configure rows scrollbar to scroll through the menu
+    scroll = Scrollbar(menu, orient=VERTICAL, command=menu_page.yview, bg="White")
+    scroll.grid(row=0, rowspan=2, column=1, sticky="ns")
+    menu_page.configure(yscrollcommand=scroll.set, highlightbackground="White")
 
-    menu_page.configure(yscrollcommand=scroll.set)
-    menu_page.bind('<Configure>', lambda e: menu_page.configure(scrollregion=menu_page.bbox("all")))
-    order_items = Frame(menu_page)
+    #Function for scrolling the canvas with the scrollbar
+    def scrollbar(event):
+        menu_page.configure(scrollregion=menu_page.bbox('all'))
+    
     #Function for scrolling the canvas with the mousewheel
     def scrolling(event):
         menu_page.yview_scroll(-int(event.delta/120), "units")
 
     #Bind scrolling action to the mousewheel and scrollbar
-    order_items.bind("<Configure>", scrolling)
+    order_items.bind("<Configure>", scrollbar)
     menu_page.bind_all("<MouseWheel>", scrolling)
-    menu_page.create_window((0,0), window=order_items, anchor="nw")
+
     images = {} #Save the images in a dictionary to be used later
     item_position = 0   #Position the item in the correct row
-
+    title_position = 0   #Position the title in the correct row
 
     #For loop which creates the menu items
     for rows in range(8):
@@ -77,6 +86,12 @@ def menu():
         
         images[rows] = img  #Save the images into a dictionary to prevent them from being garbage collected
         
+        #Create the title for each category
+        titles = {0 : "Hot Lunches", 2 : "Healthy Choices", 4 : "Snacks and Frozen food", 6 : "Drinks"}
+        if rows in titles:
+            Label(order_items, text=f"{titles[rows]}", font=("Calibri Bold", 20), bg="#89c9ec", fg="White").grid(row=rows+title_position, columnspan=3, padx=(30, 0), pady=10, sticky="ew")
+            item_position += 1
+            title_position += 1
 
         #Create the menu items
         for frames in range(3):
@@ -85,7 +100,7 @@ def menu():
 
             lbl = Label(f, image=images[rows][frames][0])
             lbl.grid(row=0, column=0, columnspan=2)
-
+            lbl.bind("<Enter>", lambda event, arg = cafemenu[rows+rows*2+frames][2], arg2 = images[rows][frames][1]: show_text(event, arg, arg2))
             lbl.bind("<Leave>", lambda event, arg = images[rows][frames][0]: hide_text(event, arg))
             Label(f, text=f"{cafemenu[rows+rows*2+frames][0]} - ${cafemenu[rows+rows*2+frames][1]:.2f}", bg="white", font=("Calibri Bold", 15)).grid(row=1, column=0, columnspan=2)
             amounts = Spinbox(f, from_=1, to=100, width=5, font=("Calibri Bold", 12))
@@ -109,6 +124,14 @@ def menu():
         price_lbl.config(text=f"Total Price - ${total:.2f}")
 
 
+#Shows the description when the user hovers over the item
+def show_text(event, arg, arg2):
+    event.widget.config(text=arg, compound="center", wraplength=185, fg="White", font=("Calibri", 12), width = 198, height=198, image=arg2)
 
-home_page()
+#Hides the description when the user moves their mouse away from the item
+def hide_text(event, arg):
+    event.widget.config(text="", image=arg, width = 200, height=200)
+
+
+menu()
 window.mainloop()
