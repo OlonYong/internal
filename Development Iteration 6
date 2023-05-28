@@ -1,0 +1,73 @@
+from tkinter import *
+from tkinter import ttk
+from PIL import ImageTk, Image
+from tkinter import messagebox
+window = Tk()
+window.config(bg="white")
+user = ""
+password = ""
+order = []
+total = 0
+cafemenu = {
+    0 : ["Hot Noodles", 3.80, "Instant noodles in a cup (chicken beef, or spicy)", "noodles.jpg"], 
+    1 : ["Spaghetti Bun", 1.50, "Spaghetti tossed in a flavorful sauce and served between soft buns", "spaghetti.png"], 
+    2 : ["Garlic Bread", 2.00, "Freshly baked bread infused with aromatic garlic and butter, toasted to perfection", "garlic.png"], 
+    3 : ["Hot Dogs", 4.00, "Juicy sausages served in a soft bun", "hotdog.png"], 
+    4 : ["Steam Buns", 3.70, "Soft and fluffy steamed buns filled with various savory fillings", "steambuns.png"], 
+    5 : ["Peters Pie", 4.80, "Savory pies with a flaky crust and a meat filling", "peter.png"],
+    6 : ["Salads", 7.50, "Fresh and crisp salad greens topped with a variety of vegetables, proteins, and dressings", "salad.jpg"],
+    7 : ["Sandwiches", 4.80, "Made with fresh bread and filled with a selection of meats, cheeses, and vegetables", "sandwich.jpg"], 
+    8 : ["Sandwiches (Gluten Free)", 5.80, "Gluten-free bread filled with a selection of meats, cheeses, and vegetables", "gluten.jpg"], 
+    9 : ["Chicken Sub", 4.80, "A hearty sandwich filled with tender grilled chicken and fresh vegetables", "chickensub.jpg"], 
+    10 : ["Pizza Bread", 3.80, "Bread topped with cheese, tomato sauce, and various toppings for a pizza-like flavor", "pizzabread.jpg"], 
+    11 : ["Wraps", 5.50, "Soft tortilla wraps filled with a variety of ingredients", "wrap.jpg"],
+    12 : ["Potato chips", 2.50, " Crispy and flavorful potato chips", "chips.jpg"], 
+    13 : ["Mrs Higgins Cookies", 3.80, "Delicious chocolate chip cookies", "cookies.jpeg"], 
+    14 : ["Juicies", 1.00,"Refreshing fruit juice frozen into a convenient and delicious ice block, available in various flavors", "juicies.png"], 
+    15 : ["Coconut Juicies", 2.50, "Refreshing coconut-flavored ice blocks", "coconuts.png"], 
+    16 : ["Moosies", 2.00, "Creamy and indulgent ice cream bars", "moosies.jpg"],
+    17 : ["Slushies", 2.50, "Icy and refreshing drinks available in a range of fruity flavors", "slushy.jpg"],
+    18 : ["Water", 2.50, "Pure NZ Spring Water 600ml", "water.png"],    
+    19 : ["Lipton Ice Tea", 4.50, "Chilled and refreshing iced tea", "tea.jpg"], 
+    20 : ["Aloe Ice Tea", 4.50, "A unique blend of iced tea infused with the soothing and refreshing taste of aloe vera", "aloe.jpg"],
+    21 : ["Barista Bros Chocolate", 4.50, "Rich and creamy chocolate milk made with the finest ingredients, providing a decadent and satisfying drink", "baristabros.png"], 
+    22 : ["Hot Chocolate", 2.50, "A comforting and velvety smooth beverage made with warm milk and premium cocoa powder", "hotchocolate.jpg"], 
+    23 : ["Powerade", 4.50, "A refreshing sports drink designed to replenish electrolytes and provide hydration during physical activities", "powerade.jpg"]}
+images = {}
+def menu_full():
+    menu = Frame(window, bg="white")
+    menu.grid(row=0, column=0, sticky="nsew")
+    canvass = Canvas(menu, width=1000, height=600, bg="white")
+    canvass.grid(row=1, column=0, sticky="nsew")
+
+
+    menu_title = Label(menu, text="Menu", font=("Arial Bold", 20), bg="white")
+    menu_title.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
+
+    scroll = Scrollbar(menu, orient=VERTICAL, command=canvass.yview)
+    scroll.grid(row=0, rowspan=4, column=2, sticky="ns")
+
+    canvass.configure(yscrollcommand=scroll.set)
+    canvass.bind('<Configure>', lambda e: canvass.configure(scrollregion=canvass.bbox("all")))
+    second_frame = Frame(canvass)
+    canvass.create_window((0,0), window=second_frame, anchor="nw")
+
+
+    for a in range(12):
+        global images
+        image_path = f"Internal assessment/Iteration 4/images/{cafemenu[a][3]}"
+        item_image = ImageTk.PhotoImage(Image.open(image_path).resize((150, 100)))
+        image_path2 = f"Internal assessment/Iteration 4/images/{cafemenu[a+12][3]}"
+        item_image2 = ImageTk.PhotoImage(Image.open(image_path2).resize((150, 100)))
+        images[a] = [item_image, item_image2]  # Store the PhotoImage object in the dictionary
+        
+        Label(second_frame, image=images[a][0], bg="white").grid(row=a, column=0, padx=10, pady=10)
+        Button(second_frame, text=f"{cafemenu[a+1][0]}").grid(row=a, column=1, padx=10, pady=10)
+        Spinbox(second_frame, from_=0, to=10).grid(row=a, column=2, padx=10, pady=10)
+        Label(second_frame, image=images[a][1], bg="white").grid(row=a, column=3, padx=10, pady=10)
+        Button(second_frame, text=f"{cafemenu[a+1][0]}").grid(row=a, column=4, padx=10, pady=10)
+        Spinbox(second_frame, from_=0, to=10).grid(row=a, column=5, padx=10, pady=10)
+        canvass.create_line(50, 50, 200, 200)
+
+menu_full()
+window.mainloop()
