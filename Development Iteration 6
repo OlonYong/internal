@@ -35,12 +35,39 @@ cafemenu = {#Contains all the information about the items in the menu
     22 : ["Hot Chocolate", 2.50, "A comforting and velvety smooth beverage made with warm milk and premium cocoa powder", "chocolate.png"], 
     23 : ["Powerade", 4.50, "A refreshing sports drink designed to replenish electrolytes and provide hydration during physical activities", "powerade.png"]}
 
+#The navigation bar used to move thorughout the program
+def navigation(frame):
+    global navbar, logo_img
+    navbar = Frame(frame, bg="#5f0137")
+    navbar.grid(row=0, column=0, sticky="ew", columnspan=2)
+
+    #Edit the navigation bar to match whether the user is logged in or not
+
+    #The buttons inside the navigation bar    
+    logo_img = ImageTk.PhotoImage(Image.open("Internal assessment/Iteration 5/images/logo.png").resize((57,40)))
+    logo_lbl = Label(navbar, image=logo_img, bg="white")
+    logo_lbl.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+    Button(navbar, text="Home", font=("Roboto", 12), bg="#5f0137", fg= "white", command= lambda: [frame.grid_forget(), navbar.grid_forget(), home_page()]).grid(row=0, column=1, pady=10, padx=(25, 65), sticky="ew")
+    Button(navbar, text="Hot Food", font=("Roboto", 12), bg="#5f0137", fg= "white", command=lambda: (menu(), frame.grid_forget(), window.after(50, lambda: shortcuts("hot")))).grid(row=0, column=2, pady=10, padx=10, sticky="ew")
+    Button(navbar, text="Healthy", font=("Roboto", 12), bg="#5f0137", fg= "white", command=lambda: (menu(), frame.grid_forget(), window.after(50, lambda: shortcuts("healthy")))).grid(row=0, column=3, padx=10, sticky="ew")
+    Button(navbar, text="Snacks", font=("Roboto", 12), bg="#5f0137", fg= "white", command=lambda: (menu(), frame.grid_forget(), window.after(50, lambda: shortcuts("snacks")))).grid(row=0, column=4, padx=10, sticky="ew")
+    Button(navbar, text="Drinks", font=("Roboto", 12), bg="#5f0137", fg= "white", command=lambda: (menu(), frame.grid_forget(), window.after(50, lambda:  shortcuts("drinks")))).grid(row=0, column=5, padx=10, sticky="ew")
+    Button(navbar, text="Login", font=("Roboto", 12), bg="#5f0137", fg= "white", command=lambda: (frame.grid_forget(), command())).grid(row=0, column=6, padx=(70, 10), sticky="e")
+    Button(navbar, text="Cart", font=("Roboto", 12), bg="#5f0137", fg= "white", command=lambda: [frame.grid_forget(), checkout()]).grid(row=0, column=7, padx=15, sticky="e")
+
+#Function used to scroll to the correct category when the user clicks on the navigation bar
+def shortcuts(category):
+    placements = {"hot" :0, "healthy" : 0.25, "snacks" : 0.5, "drinks" : 0.75}
+    menu_page.yview_moveto(placements[category])
+    menu_page.update()
+
 def menu():
     #Page setup for menu page
     global menu_page, images
     window.geometry("960x550")
     menu = Frame(window, bg="#5f0137")
     menu.grid(row=1, column=0, sticky="nsew")
+    navigation(menu)
 
     #Resize the frame to fit the canvas
     window.grid_rowconfigure(1, weight=1) 
