@@ -136,6 +136,7 @@ def login(username_entry, password_entry, message):
         for line in file:
             if username_entry.get() == line.split(" : ")[0] and password_entry.get() == line.split(" : ")[1]:
                 frames2()
+                break
             else:         
                 message.config(text="Incorrect username or password")
 
