@@ -1,0 +1,79 @@
+from tkinter import *
+from tkinter import ttk
+window = Tk()
+
+#The starting frame. This is the login page.
+def frames1():
+    global frame1
+    frame1 = Frame(window)
+    frame1.pack()
+    window.title("Login")
+    window.geometry("530x400")
+
+    title = Label(frame1, text="BDSC Cafe click and collect",font=("Comic Sans MS Bold", 20), pady=10)
+    title.pack()
+
+    username = Label(frame1, text="Username", pady=10)
+    username.pack()
+
+    username_entry = Entry(frame1)
+    username_entry.pack()
+
+    password = Label(frame1, text="Password", pady=10)
+    password.pack()
+
+    password_entry = Entry(frame1)
+    password_entry.pack()
+
+    logins = Button(frame1, text="Login", command=lambda: login(username_entry, password_entry, message))
+    logins.pack(pady=10, padx=10)
+
+    register = Button(frame1, text="Register account", command=lambda: registers(username_entry, password_entry, logins, register, message))
+    register.pack(pady=10, padx=10)
+
+    message = Label(frame1, text="")
+    message.pack()
+
+#This function checks whether the user's login details are valid.
+def login(username_entry, password_entry, message):
+    with open("Internal assessment/Iteration 3/saved.txt", "r") as file:
+        for line in file:
+            if username_entry.get() == line.split(" : ")[0] and password_entry.get() == line.split(" : ")[1]:
+                print()     #placeholder for next frame
+            else:         
+                message.config(text="Incorrect username or password")
+
+#This function is used to create a new account.
+def registers(username_entry, password_entry, logins, register, message):  
+    logins.pack_forget()
+    register.pack_forget()  #This removes the login and register buttons as they are no longer needed.
+    message.pack_forget()   #Message is also removed as it would be in the way of the new widgets. 
+
+    age = Label(frame1, text="Age")
+    age.pack(pady=10)
+    age_entry = Spinbox(frame1, from_=1, to=999, width=5)
+    age_entry.pack(padx=10)
+
+    register = Button(frame1, text="Create account", command=lambda: create_account(username_entry, password_entry, age_entry, message))
+    register.pack(pady=20, padx=10)
+
+    message = Label(frame1, text="")
+    message.pack()
+
+def create_account(username_entry, password_entry, age_entry, message):
+    user = username_entry.get()
+    password = password_entry.get()
+    age = age_entry.get()
+    if user == "" or password == "" or age == "":
+        message.config(text="Please fill in all fields")
+    else:
+        if int(age) < 13 or int(age) > 18:
+            message.config(text="You must be 13 to 18 to create an account")
+        else:
+            with open("Internal assessment/Iteration 3/saved.txt", "a") as f:
+                f.write(f"{user} : {password} : {age}\n")                
+                print()     #placeholder for next frame
+
+
+frames1()
+window.mainloop()
