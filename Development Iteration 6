@@ -10,28 +10,28 @@ password = ""
 order = []  #Tracks the user's order
 total = 0   #Tracks the total cost of the user's order
 cafemenu = {#Contains all the information about the items in the menu
-    0 : ["Hot Noodles", 3.80, "Instant noodles in rows cup (chicken beef, or spicy)", "noodles.png"], 
-    1 : ["Spaghetti Bun", 1.50, "Spaghetti tossed in rows flavorful sauce and served between soft buns", "spaghetti.png"], 
+    0 : ["Hot Noodles", 3.80, "Instant noodles in a cup (chicken beef, or spicy)", "noodles.png"], 
+    1 : ["Spaghetti Bun", 1.50, "Spaghetti tossed in a flavorful sauce and served between soft buns", "spaghetti.png"], 
     2 : ["Garlic Bread", 2.00, "Freshly baked bread infused with aromatic garlic and butter, toasted to perfection", "garlicbread.png"], 
-    3 : ["Hot Dogs", 4.00, "Juicy sausages served in rows soft bun", "hotdog.png"], 
+    3 : ["Hot Dogs", 4.00, "Juicy sausages served in a soft bun", "hotdog.png"], 
     4 : ["Steam Buns", 3.70, "Soft and fluffy steamed buns filled with various savory fillings", "steambuns.png"], 
-    5 : ["Peters Pie", 4.80, "Savory pies with rows flaky crust and rows meat filling", "pie.png"],
-    6 : ["Salads", 7.50, "Fresh and crisp salad greens topped with rows variety of vegetables, proteins, and dressings", "salad.png"],
-    7 : ["Sandwiches", 4.80, "Made with fresh bread and filled with rows selection of meats, cheeses, and vegetables", "sandwiches.png"], 
-    8 : ["Gluten Free Sandwiches", 5.80, "Gluten-free bread filled with rows selection of meats, cheeses, and vegetables", "gluten.png"], 
+    5 : ["Peters Pie", 4.80, "Savory pies with a flaky crust and a meat filling", "pie.png"],
+    6 : ["Salads", 7.50, "Fresh and crisp salad greens topped with a variety of vegetables, proteins, and dressings", "salad.png"],
+    7 : ["Sandwiches", 4.80, "Made with fresh bread and filled with a selection of meats, cheeses, and vegetables", "sandwiches.png"], 
+    8 : ["Gluten Free Sandwiches", 5.80, "Gluten-free bread filled with a selection of meats, cheeses, and vegetables", "gluten.png"], 
     9 : ["Chicken Sub", 4.80, "A hearty sandwich filled with tender grilled chicken and fresh vegetables", "chickensub.png"], 
-    10 : ["Pizza Bread", 3.80, "Bread topped with cheese, tomato sauce, and various toppings for rows pizza-like flavor", "pizzabread.png"], 
-    11 : ["Wraps", 5.50, "Soft tortilla wraps filled with rows variety of ingredients", "wrap.png"],
+    10 : ["Pizza Bread", 3.80, "Bread topped with cheese, tomato sauce, and various toppings for a pizza-like flavor", "pizzabread.png"], 
+    11 : ["Wraps", 5.50, "Soft tortilla wraps filled with a variety of ingredients", "wrap.png"],
     12 : ["Potato chips", 2.50, " Crispy and flavorful potato chips", "chips.png"],
     13 : ["Mrs Higgins Cookies", 3.80, "Delicious chocolate chip cookies", "cookies.png"], 
-    14 : ["Juicies", 1.00,"Refreshing fruit juice frozen into rows convenient and delicious ice block, available in various flavors", "juicies.png"], 
+    14 : ["Juicies", 1.00,"Refreshing fruit juice frozen into a convenient and delicious ice block, available in various flavors", "juicies.png"], 
     15 : ["Coconut Juicies", 2.50, "Refreshing coconut-flavored ice blocks", "coconut.png"], 
     16 : ["Moosies", 2.00, "Creamy and indulgent ice cream bars", "moosies.png"],
-    17 : ["Slushies", 2.50, "Icy and refreshing drinks available in rows range of fruity flavors", "slushy.png"],
+    17 : ["Slushies", 2.50, "Icy and refreshing drinks available in a range of fruity flavors", "slushy.png"],
     18 : ["Water", 2.50, "Pure NZ Spring Water 600ml", "water.png"],    
     19 : ["Lipton Ice Tea", 4.50, "Chilled and refreshing iced tea", "lipton.png"], 
     20 : ["Aloe Ice Tea", 4.50, "A unique blend of iced tea infused with the soothing and refreshing taste of aloe vera", "aloe.png"],
-    21 : ["Barista Bros Chocolate", 4.50, "Rich and creamy chocolate milk made with the finest ingredients, providing rows decadent and satisfying drink", "barista.png"], 
+    21 : ["Barista Bros Chocolate", 4.50, "Rich and creamy chocolate milk made with the finest ingredients, providing a decadent and satisfying drink", "barista.png"], 
     22 : ["Hot Chocolate", 2.50, "A comforting and velvety smooth beverage made with warm milk and premium cocoa powder", "chocolate.png"], 
     23 : ["Powerade", 4.50, "A refreshing sports drink designed to replenish electrolytes and provide hydration during physical activities", "powerade.png"]}
 window.resizable(False, False)
@@ -51,7 +51,7 @@ def navigation(frame):
         command = login
 
     #The buttons inside the navigation bar    
-    logo_img = ImageTk.PhotoImage(Image.open("Internal assessment/Iteration 5/images/logo.png").resize((57,40)))
+    logo_img = ImageTk.PhotoImage(Image.open("images/logo.png").resize((57,40)))
     logo_lbl = Label(navbar, image=logo_img, bg="white")
     logo_lbl.grid(row=0, column=0, padx=10, pady=10, sticky="w")
     Button(navbar, text="Home", font=("Roboto", 12), bg="#5f0137", fg= "white", command= lambda: [frame.grid_forget(), navbar.grid_forget(), home_page()]).grid(row=0, column=1, pady=10, padx=(25, 65), sticky="ew")
@@ -77,7 +77,7 @@ def home_page():
     window.title("BDSC Cafe online order")
     window.geometry("780x400")
     navigation(home)
-    background = ImageTk.PhotoImage(Image.open("Internal assessment/Iteration 5/images/bdsc.jpg").resize((780,400)))
+    background = ImageTk.PhotoImage(Image.open("images/bdsc.jpg").resize((780,400)))
     Label(home, image=background).grid(rowspan=5, columnspan=5, sticky="nsew")
     
     #Change the home page to match whether the user is logged in or not
@@ -90,10 +90,10 @@ def home_page():
 
     #Home screen buttons
     Label(home, text="BDSC Cafe Online Order", bg="White", font=("Arial Bold", 35), fg="#5f0137").grid(row=1, column=0, columnspan=4, padx=25, pady=10, sticky="nsew")
-    order_img = ImageTk.PhotoImage(Image.open("Internal assessment/Iteration 5/images/order.png").resize((40, 25)))
+    order_img = ImageTk.PhotoImage(Image.open("images/order.png").resize((40, 25)))
     Button(home, text="Order food", image=order_img, compound="left", bg="#5f0137", fg="white", width=250, font=("Calibri Bold", 25), command=lambda:[home.grid_forget(), menu()]).grid(row=2, column=0, columnspan=4)
 
-    login_img = ImageTk.PhotoImage(Image.open("Internal assessment/Iteration 5/images/login.png").resize((40, 25)))
+    login_img = ImageTk.PhotoImage(Image.open("images/login.png").resize((40, 25)))
     Button(home, text=label, image=login_img, compound="left", bg="#5f0137", fg="white", width=250, font=("Calibri Bold", 25), command=lambda: [home.grid_forget(), command()]).grid(row=3, column=0, pady=10, columnspan=4)
 
 #Brings up the login page
@@ -258,8 +258,8 @@ def menu():
     for rows in range(8):
         img = []  #List to save the images in
         for columns in range(3):
-            path = f"Internal assessment/Iteration 5/images/{cafemenu[rows+rows*2+columns][3]}"
-            filter_img = Image.open(f"Internal assessment/Iteration 5/images/{cafemenu[rows+rows*2+columns][3]}").resize((200, 200)).filter(ImageFilter.GaussianBlur(10))
+            path = f"images/{cafemenu[rows+rows*2+columns][3]}"
+            filter_img = Image.open(f"images/{cafemenu[rows+rows*2+columns][3]}").resize((200, 200)).filter(ImageFilter.GaussianBlur(10))
             filter_img = ImageEnhance.Brightness(filter_img).enhance(0.3)
             img.append([ImageTk.PhotoImage(Image.open(path).resize((200, 200))),ImageTk.PhotoImage(filter_img)])
         
@@ -282,7 +282,7 @@ def menu():
             lbl.bind("<Enter>", lambda event, arg = cafemenu[rows+rows*2+frames][2], arg2 = images[rows][frames][1]: show_text(event, arg, arg2))
             lbl.bind("<Leave>", lambda event, arg = images[rows][frames][0]: hide_text(event, arg))
             Label(f, text=f"{cafemenu[rows+rows*2+frames][0]} - ${cafemenu[rows+rows*2+frames][1]:.2f}", bg="white", font=("Calibri Bold", 15)).grid(row=1, column=0, columnspan=2)
-            amounts = Spinbox(f, from_=1, to=100, width=5, font=("Calibri Bold", 12))
+            amounts = Spinbox(f, from_=1, to=10, width=5, font=("Calibri Bold", 12), state="readonly")
             amounts.grid(row=2, column=1, padx=10, pady=10)
             Button(f, text="Add to Order", font=("Calibri Bold", 12), command=lambda rows=rows, amounts=amounts, frames=frames: add_to_order(cafemenu[rows+rows*2+frames][0], int(amounts.get()), cafemenu[rows+rows*2+frames][1])).grid(row=2, column=0, padx=10, pady=10)
 
@@ -366,7 +366,7 @@ def finish():
     window.title("View order")
     window.geometry("660x400")
 
-    logo_img = ImageTk.PhotoImage(Image.open("Internal assessment/Iteration 5/images/logo.png").resize((100,70)))
+    logo_img = ImageTk.PhotoImage(Image.open("images/logo.png").resize((100,70)))
     logo_lbl = Label(completed, image=logo_img, bg="white")
     logo_lbl.grid(row=0, column=0, pady=10, sticky="w")
 
